@@ -1,0 +1,234 @@
+import type { BTableLiteProps, TableField, TableFieldObject, TableItem } from '../../types';
+import type { TableFieldObjectFormatter } from '../../types/TableFieldObject';
+declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<BTableLiteProps>, {
+    caption: undefined;
+    align: undefined;
+    fields: () => never[];
+    footClone: boolean;
+    items: () => never[];
+    labelStacked: boolean;
+    showEmpty: boolean;
+    emptyText: string;
+    emptyFilteredText: string;
+    fieldColumnClass: undefined;
+    tbodyTrClass: undefined;
+    captionHtml: undefined;
+    detailsTdClass: undefined;
+    headVariant: undefined;
+    headRowVariant: undefined;
+    footRowVariant: undefined;
+    footVariant: undefined;
+    modelValue: undefined;
+    primaryKey: undefined;
+    tbodyClass: undefined;
+    tbodyTrAttr: undefined;
+    tfootClass: undefined;
+    tfootTrClass: undefined;
+    theadClass: undefined;
+    theadTrClass: undefined;
+    borderVariant: undefined;
+    tableClass: undefined;
+    variant: undefined;
+    bordered: undefined;
+    borderless: undefined;
+    captionTop: undefined;
+    dark: undefined;
+    hover: undefined;
+    id: undefined;
+    noBorderCollapse: undefined;
+    outlined: undefined;
+    fixed: undefined;
+    responsive: undefined;
+    stacked: undefined;
+    striped: undefined;
+    stripedColumns: undefined;
+    small: undefined;
+    stickyHeader: undefined;
+}>, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
+    "head-clicked": (key: import("../../types").LiteralUnion<string>, field: TableField, event: MouseEvent, isFooter: boolean) => void;
+    "row-clicked": (item: TableItem, index: number, event: MouseEvent) => void;
+    "row-dbl-clicked": (item: TableItem, index: number, event: MouseEvent) => void;
+    "row-hovered": (item: TableItem, index: number, event: MouseEvent) => void;
+    "row-unhovered": (item: TableItem, index: number, event: MouseEvent) => void;
+}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<BTableLiteProps>, {
+    caption: undefined;
+    align: undefined;
+    fields: () => never[];
+    footClone: boolean;
+    items: () => never[];
+    labelStacked: boolean;
+    showEmpty: boolean;
+    emptyText: string;
+    emptyFilteredText: string;
+    fieldColumnClass: undefined;
+    tbodyTrClass: undefined;
+    captionHtml: undefined;
+    detailsTdClass: undefined;
+    headVariant: undefined;
+    headRowVariant: undefined;
+    footRowVariant: undefined;
+    footVariant: undefined;
+    modelValue: undefined;
+    primaryKey: undefined;
+    tbodyClass: undefined;
+    tbodyTrAttr: undefined;
+    tfootClass: undefined;
+    tfootTrClass: undefined;
+    theadClass: undefined;
+    theadTrClass: undefined;
+    borderVariant: undefined;
+    tableClass: undefined;
+    variant: undefined;
+    bordered: undefined;
+    borderless: undefined;
+    captionTop: undefined;
+    dark: undefined;
+    hover: undefined;
+    id: undefined;
+    noBorderCollapse: undefined;
+    outlined: undefined;
+    fixed: undefined;
+    responsive: undefined;
+    stacked: undefined;
+    striped: undefined;
+    stripedColumns: undefined;
+    small: undefined;
+    stickyHeader: undefined;
+}>>> & {
+    "onHead-clicked"?: ((key: import("../../types").LiteralUnion<string>, field: TableField, event: MouseEvent, isFooter: boolean) => any) | undefined;
+    "onRow-clicked"?: ((item: TableItem, index: number, event: MouseEvent) => any) | undefined;
+    "onRow-dbl-clicked"?: ((item: TableItem, index: number, event: MouseEvent) => any) | undefined;
+    "onRow-hovered"?: ((item: TableItem, index: number, event: MouseEvent) => any) | undefined;
+    "onRow-unhovered"?: ((item: TableItem, index: number, event: MouseEvent) => any) | undefined;
+}, {
+    dark: import("../../types").Booleanish;
+    caption: string;
+    small: import("../../types").Booleanish;
+    id: string;
+    align: import("../../types").VerticalAlign;
+    variant: keyof import("../../types").BaseColorVariant | null;
+    fixed: import("../../types").Booleanish;
+    modelValue: any;
+    striped: import("../../types").Booleanish;
+    items: TableItem[];
+    borderVariant: keyof import("../../types").BaseColorVariant | null;
+    captionHtml: string;
+    stacked: import("../../types").Booleanish | import("../../types").Breakpoint;
+    bordered: import("../../types").Booleanish;
+    borderless: import("../../types").Booleanish;
+    captionTop: import("../../types").Booleanish;
+    hover: import("../../types").Booleanish;
+    noBorderCollapse: import("../../types").Booleanish;
+    outlined: import("../../types").Booleanish;
+    responsive: import("../../types").Booleanish | import("../../types").Breakpoint;
+    stickyHeader: import("../../types").Booleanish;
+    stripedColumns: import("../../types").Booleanish;
+    tableClass: any;
+    detailsTdClass: any;
+    emptyFilteredText: string;
+    emptyText: string;
+    fieldColumnClass: string | any[] | ((field: TableFieldObject<Record<string, unknown>>) => Record<string, any>[]) | Record<PropertyKey, any>;
+    fields: TableField[];
+    footClone: import("../../types").Booleanish;
+    footRowVariant: keyof import("../../types").BaseColorVariant | null;
+    footVariant: keyof import("../../types").BaseColorVariant | null;
+    headRowVariant: keyof import("../../types").BaseColorVariant | null;
+    headVariant: keyof import("../../types").BaseColorVariant | null;
+    labelStacked: import("../../types").Booleanish;
+    primaryKey: string;
+    showEmpty: import("../../types").Booleanish;
+    tbodyClass: any;
+    tbodyTrAttr: any;
+    tbodyTrClass: string | any[] | Record<PropertyKey, any> | ((item: TableItem | null, type: string) => string | any[] | null | undefined);
+    tfootClass: any;
+    tfootTrClass: any;
+    theadClass: any;
+    theadTrClass: any;
+}, {}>, Partial<Record<string, (_: {
+    label: string | undefined;
+    column: import("../../types").LiteralUnion<string>;
+    field: TableFieldObject<Record<string, unknown>>;
+    isFoot: boolean;
+}) => any>> & Partial<Record<string, (_: {
+    value: unknown;
+    index: number;
+    item: TableItem;
+    field: TableFieldObject<Record<string, unknown>>;
+    items: TableItem[];
+    toggleDetails: () => void;
+    detailsShowing: boolean;
+}) => any>> & Partial<Record<string, (_: {
+    label: string | undefined;
+    column: import("../../types").LiteralUnion<string>;
+    field: TableFieldObject<Record<string, unknown>>;
+    isFoot: boolean;
+}) => any>> & {
+    "thead-top"?(_: {}): any;
+    "thead-sub"?(_: {
+        key: import("../../types").LiteralUnion<string>;
+        label?: string | undefined;
+        headerTitle?: string | undefined;
+        headerAbbr?: string | undefined;
+        class?: any;
+        formatter?: TableFieldObjectFormatter<Record<string, unknown>> | undefined;
+        sortable?: boolean | undefined;
+        sortKey?: string | undefined;
+        sortDirection?: string | undefined;
+        sortByFormatted?: boolean | undefined;
+        filterByFormatted?: boolean | undefined;
+        tdClass?: any;
+        thClass?: any;
+        thStyle?: import("vue").StyleValue | undefined;
+        variant?: keyof import("../../types").BaseColorVariant | null | undefined;
+        tdAttr?: Record<string, unknown> | undefined;
+        thAttr?: Record<string, unknown> | undefined;
+        isRowHeader?: boolean | undefined;
+        stickyColumn?: boolean | undefined;
+        items: TableFieldObject<Record<string, unknown>>[];
+    }): any;
+    "custom-body"?(_: {
+        fields: TableFieldObject<Record<string, unknown>>[];
+        items: TableItem[];
+        columns: number;
+    }): any;
+    "top-row"?(_: {}): any;
+    "row-details"?(_: {
+        item: TableItem;
+        toggleDetails: () => void;
+        fields: TableField[];
+        index: number;
+    }): any;
+    empty?(_: {
+        items: TableItem[];
+    }): any;
+    "bottom-row"?(_: {}): any;
+    "custom-foot"?(_: {
+        fields: TableFieldObject<Record<string, unknown>>[];
+        items: TableItem[];
+        columns: number;
+    }): any;
+    "table-caption"?(_: {}): any;
+}>;
+export default _default;
+type __VLS_NonUndefinedable<T> = T extends undefined ? never : T;
+type __VLS_TypePropsToRuntimeProps<T> = {
+    [K in keyof T]-?: {} extends Pick<T, K> ? {
+        type: import('vue').PropType<__VLS_NonUndefinedable<T[K]>>;
+    } : {
+        type: import('vue').PropType<T[K]>;
+        required: true;
+    };
+};
+type __VLS_WithDefaults<P, D> = {
+    [K in keyof Pick<P, keyof P>]: K extends keyof D ? __VLS_Prettify<P[K] & {
+        default: D[K];
+    }> : P[K];
+};
+type __VLS_Prettify<T> = {
+    [K in keyof T]: T[K];
+} & {};
+type __VLS_WithTemplateSlots<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};

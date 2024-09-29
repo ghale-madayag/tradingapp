@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TradeController;
 use App\Http\Controllers\VelzonRoutesController;
+use App\Jobs\CheckTradeSignalsJob;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::controller(TradeController::class)->group(function () {
         // dashboards
         Route::get('/', 'dashboard');
-
+        Route::get('/buy', 'buy');
+        Route::get('/sell', 'sell');
     });
 });
+

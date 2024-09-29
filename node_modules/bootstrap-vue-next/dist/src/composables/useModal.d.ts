@@ -1,0 +1,7 @@
+import { type MaybeRefOrGetter } from 'vue';
+declare const _default: (id?: MaybeRefOrGetter<string | undefined>) => {
+    show(): void;
+    hide(trigger?: string): void;
+    modal: Readonly<import("vue").Ref<import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string, {}>, {}, {}> | null | undefined>>;
+};
+export default _default;
