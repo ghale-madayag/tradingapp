@@ -22,7 +22,7 @@ class CheckBuySellSignals extends Command
         $buy = app('App\Http\Controllers\TradeController')->checkBuySignal($coins);
        
         
-        \Log::info("Buy Signal: ", $sell);
+        \Log::info("Sell Signal: ", $sell);
         \Log::info("Buy Signal: ", $buy);
         
     }

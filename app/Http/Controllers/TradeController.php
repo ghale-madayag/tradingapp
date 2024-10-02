@@ -274,6 +274,8 @@ class TradeController extends Controller
                 $rsi = $this->calculateRSI($historicalPrices, 14); // 14-period RSI
                 
                 $sellSignal = $macd['signal'] < 0 && $rsi > 70;
+                $msg[] = $symbol.'-'.$currentPrice.'- MACD:'.$macd['signal'] < 0;
+                $msg[] = '-RSI:'.$rsi > 70;
     
                 // Only proceed if sell signal is true
                 if ($sellSignal) {
@@ -420,7 +422,7 @@ class TradeController extends Controller
             'symbol' => $symbol,
             'side' => $side,
             'type' => $type,
-            'quoteOrderQty' => 100,
+            'quoteOrderQty' => 90,
             'timestamp' => $timestamp,
         ];
     
