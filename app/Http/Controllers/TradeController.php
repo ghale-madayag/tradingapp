@@ -147,7 +147,7 @@ class TradeController extends Controller
     
         foreach ($accountData['balances'] as $asset) {
             // Check if the free balance is greater than 0
-            if (floatval($asset['free']) > 0) {
+            if (floatval($asset['free']) > 1) {
                 // Append 'PHP' to the asset symbol
                 $coinWithPHP = $asset['asset'] . 'PHP';
     
@@ -198,7 +198,7 @@ class TradeController extends Controller
             
             // Calculate MACD and RSI
             $macd = $this->calculateMACD($historicalPrices);
-            $rsi = $this->calculateRSI($historicalPrices, 14); // 14-period RSI
+            $rsi = $this->calculateRSI($historicalPrices, 9); // 14-period RSI
             
             // Check balance
             $balance = $this->getBalance();  // Function to get your total balance in your base currency (e.g., USD)
@@ -265,19 +265,16 @@ class TradeController extends Controller
             $recentOrders = $this->getRecentOrders($symbol);
             if (!empty($recentOrders)) {
                 $executedPrice = $this->getExecutedPrice($recentOrders[0]); // Your executed price from filled order
-                
                 // Fetch current market price
                 $currentPrice = floatval($coin['lastPrice']);
                 // Calculate MACD and RSI
                 $historicalPrices = $this->getHistoricalPrices($symbol);
                 $macd = $this->calculateMACD($historicalPrices);
-                $rsi = $this->calculateRSI($historicalPrices, 14); // 14-period RSI
-                
+                $rsi = $this->calculateRSI($historicalPrices, 9); // 14-period RSI
+
                 $sellSignal = $macd['signal'] < 0 && $rsi > 70;
-                $msg[] = $symbol.'-'.$currentPrice.'- MACD:'.$macd['signal'] < 0;
-                $msg[] = '-RSI:'.$rsi > 70;
     
-                // Only proceed if sell signal is true
+                //Only proceed if sell signal is true
                 if ($sellSignal) {
                     // Example: Calculate a profit target of 5%
                     $profitTarget = $executedPrice * 1.05; // 5% profit
@@ -330,9 +327,9 @@ class TradeController extends Controller
 
         $order =  $response->json();
         
-        // usort($order, function ($a, $b) {
-        //     return $b['time'] <=> $a['time']; // Change 'time' to the actual field name in your API response
-        // });
+        usort($order, function ($a, $b) {
+            return $b['time'] <=> $a['time']; // Change 'time' to the actual field name in your API response
+        });
         // Return the API response
         return $order;
     }
@@ -603,35 +600,47 @@ class TradeController extends Controller
     
     //Strategy
 
-    public function calculateMACD($prices, $shortTermPeriod = 12, $longTermPeriod = 26, $signalPeriod = 9) {
+    public function calculateMACD($prices, $shortTermPeriod = 6, $longTermPeriod = 13, $signalPeriod = 5)
+    {
+        // Calculate the short-term and long-term EMAs for all price points
         $emaShort = $this->calculateEMA($prices, $shortTermPeriod);
         $emaLong = $this->calculateEMA($prices, $longTermPeriod);
-        $macd = $emaShort - $emaLong;
-    
-        // Calculate Signal Line
-        $signalLine = $this->calculateEMA(array_slice($prices, -$signalPeriod), $signalPeriod); // Signal line from MACD values
-    
-        return ['macd' => $macd, 'signal' => $signalLine];
-    }
-
-    // Example EMA Calculation Function
-    private function calculateEMA($prices, $period) {
         
-        $k = 2 / ($period + 1);
-        $ema = [];
-        
-        // Start with the first price for the first EMA value
-        $ema[0] = floatval($prices[0]); 
-
-        foreach ($prices as $i => $price) {
-            if ($i == 0) continue; // Skip the first price
-            $ema[$i] = ($price * $k) + ($ema[$i - 1] * (1 - $k));
+        // Calculate MACD values as the difference between short-term and long-term EMAs
+        $macd = [];
+        $length = min(count($emaShort), count($emaLong));
+        for ($i = 0; $i < $length; $i++) {
+            $macd[] = $emaShort[$i] - $emaLong[$i];
         }
 
-        return end($ema); // Return the last EMA value
+        // Calculate Signal Line as EMA of MACD values
+        $signalLine = $this->calculateEMA($macd, $signalPeriod);
+
+        // Return the latest MACD and Signal Line values
+        return [
+            'macd' => end($macd),        // Latest MACD value
+            'signal' => end($signalLine) // Latest Signal Line value
+        ];
     }
 
-    private function calculateRSI($prices, $period) {
+
+    public function calculateEMA($prices, $period)
+    {
+        $ema = [];
+        $multiplier = 2 / ($period + 1);
+        // First EMA value is simply the SMA (Simple Moving Average)
+        $ema[] = array_sum(array_slice($prices, 0, $period)) / $period;
+        
+        // Calculate subsequent EMA values
+        for ($i = $period; $i < count($prices); $i++) {
+            $ema[] = (($prices[$i] - end($ema)) * $multiplier) + end($ema);
+        }
+
+        return $ema;
+    }
+
+    private function calculateRSI($prices, $period)
+    {
         $gains = [];
         $losses = [];
 
@@ -647,16 +656,79 @@ class TradeController extends Controller
             }
         }
 
-        // Calculate average gain and loss
-        $avgGain = array_sum(array_slice($gains, -$period)) / $period;
-        $avgLoss = array_sum(array_slice($losses, -$period)) / $period;
+        // First, calculate the average gain and loss for the first 'period'
+        $avgGain = array_sum(array_slice($gains, 0, $period)) / $period;
+        $avgLoss = array_sum(array_slice($losses, 0, $period)) / $period;
 
-        // Calculate RS and RSI
+        // Then, calculate subsequent smoothed averages for the remaining prices
+        for ($i = $period; $i < count($gains); $i++) {
+            $avgGain = (($avgGain * ($period - 1)) + $gains[$i]) / $period;
+            $avgLoss = (($avgLoss * ($period - 1)) + $losses[$i]) / $period;
+        }
+
+        // Calculate the final RS and RSI
         $rs = $avgLoss == 0 ? 0 : $avgGain / $avgLoss;
         $rsi = 100 - (100 / (1 + $rs));
 
         return $rsi;
     }
+
+
+
+    // public function calculateMACD($prices, $shortTermPeriod = 6, $longTermPeriod = 13, $signalPeriod = 5) {
+    //     $emaShort = $this->calculateEMA($prices, $shortTermPeriod);
+    //     $emaLong = $this->calculateEMA($prices, $longTermPeriod);
+    //     $macd = $emaShort - $emaLong;
+    
+    //     // Calculate Signal Line
+    //     $signalLine = $this->calculateEMA(array_slice($prices, -$signalPeriod), $signalPeriod); // Signal line from MACD values
+    
+    //     return ['macd' => $macd, 'signal' => $signalLine];
+    // }
+
+    // Example EMA Calculation Function
+    // private function calculateEMA($prices, $period) {
+        
+    //     $k = 2 / ($period + 1);
+    //     $ema = [];
+        
+    //     // Start with the first price for the first EMA value
+    //     $ema[0] = floatval($prices[0]); 
+
+    //     foreach ($prices as $i => $price) {
+    //         if ($i == 0) continue; // Skip the first price
+    //         $ema[$i] = ($price * $k) + ($ema[$i - 1] * (1 - $k));
+    //     }
+
+    //     return end($ema); // Return the last EMA value
+    // }
+
+    // private function calculateRSI($prices, $period) {
+    //     $gains = [];
+    //     $losses = [];
+
+    //     // Calculate daily gains and losses
+    //     for ($i = 1; $i < count($prices); $i++) {
+    //         $change = $prices[$i] - $prices[$i - 1];
+    //         if ($change > 0) {
+    //             $gains[] = $change;
+    //             $losses[] = 0;
+    //         } else {
+    //             $gains[] = 0;
+    //             $losses[] = abs($change);
+    //         }
+    //     }
+
+    //     // Calculate average gain and loss
+    //     $avgGain = array_sum(array_slice($gains, -$period)) / $period;
+    //     $avgLoss = array_sum(array_slice($losses, -$period)) / $period;
+
+    //     // Calculate RS and RSI
+    //     $rs = $avgLoss == 0 ? 0 : $avgGain / $avgLoss;
+    //     $rsi = 100 - (100 / (1 + $rs));
+
+    //     return $rsi;
+    // }
 
     
     public function checkStopLoss($currentPrice, $entryPrice, $stopLossPercent) {
