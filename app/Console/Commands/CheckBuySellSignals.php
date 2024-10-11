@@ -16,23 +16,21 @@ class CheckBuySellSignals extends Command
 
     public function handle()
     {
-    //    // Instantiate the TradeController once
-    //    $tradeController = app('App\Http\Controllers\TradeController');
+       // Instantiate the TradeController once
+       $tradeController = app('App\Http\Controllers\TradeController');
         
-    //    // Check sell signals first
-    //    $sell = $tradeController->checkSellSignal();
+       // Check sell signals first
+       $sell = $tradeController->checkSellSignal();
        
-    //    // Then check active coins
-    //    $coins = $tradeController->getActiveCoins();
+       // Then check active coins
+       $coins = $tradeController->getActiveCoins();
        
-    //    // Finally, check buy signals
-    //    $buy = $tradeController->checkBuySignal($coins);
+       // Finally, check buy signals
+       $buy = $tradeController->checkBuySignal($coins);
       
-    //    // Log the signals
-    //    \Log::info("Sell Signal: ", $sell);
-    //    \Log::info("Buy Signal: ", $buy);
-
-        \Log::info('Test Log');
+       // Log the signals
+       \Log::info("Sell Signal: ", $sell);
+       \Log::info("Buy Signal: ", $buy);
         
     }
 }
