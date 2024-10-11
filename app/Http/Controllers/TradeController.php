@@ -140,27 +140,27 @@ class TradeController extends Controller
             'X-COINS-APIKEY' => $this->coinsApiKey,
         ])->get($urlBal);
     
-        $accountData = $response->json();  // Parse the JSON response
+        return $accountData = $response->json();  // Parse the JSON response
         //dd($accountData);
         // Prepare an array to hold assets with 'PHP' appended
-        $coinsInBalance = [];
+        // $coinsInBalance = [];
     
-        foreach ($accountData['balances'] as $asset) {
-            // Check if the free balance is greater than 0
-            if (floatval($asset['free']) > 1) {
-                // Append 'PHP' to the asset symbol
-                $coinWithPHP = $asset['asset'] . 'PHP';
+        // foreach ($accountData['balances'] as $asset) {
+        //     // Check if the free balance is greater than 0
+        //     if (floatval($asset['free']) > 1) {
+        //         // Append 'PHP' to the asset symbol
+        //         $coinWithPHP = $asset['asset'] . 'PHP';
     
-                // Store the asset with its free and locked balance
-                $coinsInBalance[] = [
-                    'asset' => $coinWithPHP,
-                    'free' => $asset['free'],
-                    'locked' => $asset['locked'],
-                ];
-            }
-        }
+        //         // Store the asset with its free and locked balance
+        //         $coinsInBalance[] = [
+        //             'asset' => $coinWithPHP,
+        //             'free' => $asset['free'],
+        //             'locked' => $asset['locked'],
+        //         ];
+        //     }
+        // }
     
-        return $coinsInBalance;  // Return the list of coins in balance
+        //return $coinsInBalance;  // Return the list of coins in balance
     }
 
     public function getMatchingCoins() {
