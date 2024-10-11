@@ -24,7 +24,6 @@ class CheckBuySellSignals extends Command
        
        // Then check active coins
        $coins = $tradeController->getCoinsInBalance();
-       $serverIp = request()->server('SERVER_ADDR');
        
        // Finally, check buy signals
        //$buy = $tradeController->checkBuySignal($coins);
@@ -33,7 +32,7 @@ class CheckBuySellSignals extends Command
        //\Log::info("Sell Signal: ", $sell);
        //\Log::info("Buy Signal: ", $buy);
 
-       \Log::info("Balances: ", $serverIp);
+       \Log::info("Balances: ", $coins);
         
     }
 }
