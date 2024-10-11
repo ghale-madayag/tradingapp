@@ -98,26 +98,25 @@ class TradeController extends Controller
             return strpos($coin['symbol'], 'PHP') !== false;  // Ensure that the coin has some trading volume
         }); 
     
-        return $coins;  // Return the filtered list
+        return $coinsUnder5PHP;  // Return the filtered list
     }
 
     public function getActiveCoins($minVolume = 10000) {
         $coins = $this->getAllCoins();  // Fetch all coins data from the API
-        
-        return $coins;
-        // $filteredCoins = [];
-        // foreach ($coins as $coin) {
-        //     $symbol = $coin['symbol'];
-        //     $price = floatval($coin['lastPrice']);
-        //     $volume = floatval($coin['volume']);  // Assuming volume data is available in the API response
     
-        //     // Filter coins based on trade volume
-        //     if ($volume >= $minVolume) {
-        //         $filteredCoins[] = $coin;
-        //     }
-        // }
+        $filteredCoins = [];
+        foreach ($coins as $coin) {
+            $symbol = $coin['symbol'];
+            $price = floatval($coin['lastPrice']);
+            $volume = floatval($coin['volume']);  // Assuming volume data is available in the API response
     
-        // return $filteredCoins;
+            // Filter coins based on trade volume
+            if ($volume >= $minVolume) {
+                $filteredCoins[] = $coin;
+            }
+        }
+    
+        return $filteredCoins;
     }
     
 
