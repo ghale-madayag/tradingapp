@@ -244,7 +244,7 @@ class TradeController extends Controller
             }
             
 
-            // Call the sell signal check for the current coin
+            //Call the sell signal check for the current coin
             //$sellMessages = $this->checkSellSignal();
             //$msg = array_merge($msg, $sellMessages); // Merge sell messages into the main message array
 
