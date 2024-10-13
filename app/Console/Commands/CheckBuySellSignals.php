@@ -27,7 +27,7 @@ class CheckBuySellSignals extends Command
     //    \Log::info("Sell Signal: ", $sell);
     //    \Log::info("Buy Signal: ", $buy);
 
-    $userip = $tradeController->getUserIP();
+    $userip = $tradeController->getBalance();
 
     \Log::info("Buy Signal: ", $userip);
 

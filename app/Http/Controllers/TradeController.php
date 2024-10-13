@@ -62,7 +62,7 @@ class TradeController extends Controller
 
         $freePHP = $phpBalance ? reset($phpBalance)['free'] : null;
 
-        return $freePHP;
+        return $responce;
     }
 
     public function getAllCoinsUnder5PHP(){
