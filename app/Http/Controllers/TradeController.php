@@ -84,6 +84,20 @@ class TradeController extends Controller
         return $coinsUnder5PHP;  // Return the filtered list
     }
 
+    public function getUserIP(){
+        $path = 'https://api.pro.coins.ph/openapi/v1/user/ip';
+    
+        // Fetch the coin data from the API
+        $response = Http::withHeaders([
+            'X-COINS-APIKEY' => $this->coinsApiKey,
+        ])->get($path);
+    
+        $result = $response->json();  // Parse the JSON response
+
+        return $result;  // Return the filtered list
+    }
+
+
     public function getAllCoins(){
         $path = 'https://api.pro.coins.ph/openapi/quote/v1/ticker/24hr';
     
@@ -140,27 +154,27 @@ class TradeController extends Controller
             'X-COINS-APIKEY' => $this->coinsApiKey,
         ])->get($urlBal);
     
-        return $accountData = $response->json();  // Parse the JSON response
+        $accountData = $response->json();  // Parse the JSON response
         //dd($accountData);
         // Prepare an array to hold assets with 'PHP' appended
-        // $coinsInBalance = [];
+        $coinsInBalance = [];
     
-        // foreach ($accountData['balances'] as $asset) {
-        //     // Check if the free balance is greater than 0
-        //     if (floatval($asset['free']) > 1) {
-        //         // Append 'PHP' to the asset symbol
-        //         $coinWithPHP = $asset['asset'] . 'PHP';
+        foreach ($accountData['balances'] as $asset) {
+            // Check if the free balance is greater than 0
+            if (floatval($asset['free']) > 1) {
+                // Append 'PHP' to the asset symbol
+                $coinWithPHP = $asset['asset'] . 'PHP';
     
-        //         // Store the asset with its free and locked balance
-        //         $coinsInBalance[] = [
-        //             'asset' => $coinWithPHP,
-        //             'free' => $asset['free'],
-        //             'locked' => $asset['locked'],
-        //         ];
-        //     }
-        // }
+                // Store the asset with its free and locked balance
+                $coinsInBalance[] = [
+                    'asset' => $coinWithPHP,
+                    'free' => $asset['free'],
+                    'locked' => $asset['locked'],
+                ];
+            }
+        }
     
-        //return $coinsInBalance;  // Return the list of coins in balance
+        return $coinsInBalance;  // Return the list of coins in balance
     }
 
     public function getMatchingCoins() {
@@ -238,8 +252,8 @@ class TradeController extends Controller
                 $amountToBuy = (int) $amountToBuy;
             
                 // Proceed to place the buy order
-                $msg[] = "Buying " . $symbol . " at price " . $currentPrice . " with amount " . $amountToBuy . "\n";
-                $this->placeOrderBuy($symbol, 'buy', 'market', $amountToBuy);
+                //$msg[] = "Buying " . $symbol . " at price " . $currentPrice . " with amount " . $amountToBuy . "\n";
+                $msg[] = $this->placeOrderBuy($symbol, 'buy', 'market', $amountToBuy);
                 $entryPrices[$symbol] = $currentPrice;  // Store the entry price for future reference
             }
             
@@ -280,14 +294,17 @@ class TradeController extends Controller
                     $profitTarget = $executedPrice * 1.05; // 5% profit
                     // Example: Calculate a stop-loss threshold of 5%
                     $stopLossThreshold = $executedPrice * 0.95; // 5% loss
+
                     
                     // Get the available balance of the coin
                     $amountToSell = (int) $this->getCoinBalance($symbol);
+
+                    $msg[] = (($currentPrice >= $profitTarget || $currentPrice <= $stopLossThreshold) && $amountToSell > 0);
     
                     // Check if the current price meets either the profit target or stop-loss condition
                     if (($currentPrice >= $profitTarget || $currentPrice <= $stopLossThreshold) && $amountToSell > 0) {
-                        $msg[] = "Selling " . $symbol . " at price " . $currentPrice . "\n";
-                        $this->placeOrderSell($symbol, 'sell', 'market', $amountToSell); // Sell all available units
+                        //$msg[] = "Selling " . $symbol . " at price " . $currentPrice . "\n";
+                        $msg[] = $this->placeOrderSell($symbol, 'sell', 'market', $amountToSell); // Sell all available units
                     } else if ($amountToSell <= 0) {
                         $msg[] = "No balance to sell for " . $symbol . "\n"; // Handle case where there's no balance
                     }
@@ -448,6 +465,7 @@ class TradeController extends Controller
             // Check for a successful response
             if ($response->getStatusCode() === 200) {
                 return json_decode($response->getBody(), true);  // Return the API response
+                //return 'Buying: '. $symbol;
             } else {
                 // Handle error (e.g., log the error, return an error message)
                 return [
