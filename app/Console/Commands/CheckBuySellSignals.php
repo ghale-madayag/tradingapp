@@ -18,20 +18,14 @@ class CheckBuySellSignals extends Command
     {
        $tradeController = app('App\Http\Controllers\TradeController');
         
-    //    $sell = $tradeController->checkSellSignal();
+       $sell = $tradeController->checkSellSignal();
        
-    //    $coins = $tradeController->getActiveCoins();
+       $coins = $tradeController->getActiveCoins();
        
-    //    $buy = $tradeController->checkBuySignal($coins);
+       $buy = $tradeController->checkBuySignal($coins);
       
-    //    \Log::info("Sell Signal: ", $sell);
-    //    \Log::info("Buy Signal: ", $buy);
-
-    $userip = $tradeController->getBalance();
-
-    \Log::info("Buy Signal: ", $userip);
-
-
+       \Log::info("Sell Signal: ", $sell);
+       \Log::info("Buy Signal: ", $buy);
         
     }
 }
